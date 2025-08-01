@@ -1,0 +1,16 @@
+class Solution:
+    def generate(self,ind,curr,ans,k,target):
+        if len(curr) == k:
+            if target == 0:
+                ans.append(curr.copy())
+            return
+        for i in range(ind,10):
+            if i > target:
+                break
+            curr.append(i)
+            self.generate(i + 1,curr,ans,k,target - i)
+            curr.pop()
+    def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+        ans = []
+        self.generate(1,[],ans,k,n)
+        return ans
