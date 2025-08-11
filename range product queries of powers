@@ -1,0 +1,22 @@
+class Solution:
+    def productQueries(self, n: int, queries: List[List[int]]) -> List[int]:
+        MOD = 10**9 + 7
+        powers = []
+        bit = 0
+        while n > 0:
+            if n & 1:
+                powers.append(1 << bit)
+            bit += 1
+            n >>= 1
+        m = len(powers)
+        prefix = [1] * (m + 1)
+        inv_prefix = [1] * (m + 1)
+        for i in range(m):
+            prefix[i+1] = (prefix[i] * powers[i]) % MOD
+        inv_prefix[m] = pow(prefix[m], MOD-2, MOD)
+        for i in range(m-1, -1, -1):
+            inv_prefix[i] = (inv_prefix[i+1] * powers[i]) % MOD
+        res = []
+        for l, r in queries:
+            res.append((prefix[r+1] * inv_prefix[l]) % MOD)
+        return res
