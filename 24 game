@@ -1,0 +1,27 @@
+class Solution:
+    def judgePoint24(self, cards: List[int]) -> bool:
+        EPS = 1e-6
+        def dfs(nums):
+            if len(nums) == 1:
+                return abs(nums[0] - 24) < EPS
+            for i in range(len(nums)):
+                for j in range(len(nums)):
+                    if i == j:
+                        continue
+                    next_nums = []
+                    for k in range(len(nums)):
+                        if k!= i and k!=j :
+                            next_nums.append(nums[k])
+                    a,b = nums[i],nums[j]
+                    for result in self.compute(a,b):
+                        if dfs(next_nums + [result]):
+                            return True
+            return False
+        return dfs([float(c) for c in cards])
+    def compute(self,a,b):
+        results = [a+b,a-b,b-a,a*b]
+        if abs(b) > 1e-6:
+            results.append(a/b)
+        if abs(a) > 1e-6:
+            results.append(b/a)
+        return results
