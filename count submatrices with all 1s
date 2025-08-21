@@ -1,0 +1,24 @@
+class Solution:
+    def numSubmat(self, mat: List[List[int]]) -> int:
+        m,n = len(mat),len(mat[0])
+        heights = [0]*n
+        result = 0
+        for i in range(m):
+            for j in range(n):
+                if mat[i][j] == 1:
+                    heights[j] += 1
+                else:
+                    heights[j] = 0
+            stack = []
+            rowSum = [0]*n
+            for j in range(n):
+                while stack  and heights[stack[-1]] >= heights[j]:
+                    stack.pop()
+                if stack:
+                    prev = stack[-1]
+                    rowSum[j] = rowSum[prev] + heights[j] * (j-prev)
+                else:
+                    rowSum[j] = heights[j]*(j+1)
+                stack.append(j)
+                result += rowSum[j]
+        return result
