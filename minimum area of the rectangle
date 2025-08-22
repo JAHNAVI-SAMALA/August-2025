@@ -1,0 +1,12 @@
+class Solution:
+    def minimumArea(self, grid: List[List[int]]) -> int:
+        x_min,y_min = float('inf'),float('inf')
+        x_max,y_max = -1,-1
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == 1:
+                    x_min = min(x_min,i)
+                    y_min = min(y_min,j)
+                    x_max = max(x_max,i)
+                    y_max = max(y_max,j)
+        return (x_max - x_min +1)*(y_max - y_min +1)
