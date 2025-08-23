@@ -1,0 +1,30 @@
+class Solution:
+    def minimumSum(self, grid: List[List[int]]) -> int:
+        m,n = len(grid),len(grid[0])
+        ans = m*n
+        def area(si,ei,sj,ej):
+            x1,y1 = float('inf'),float('inf')
+            x2 = y2 = 0
+            for i in range(si,ei + 1):
+                for j in range(sj,ej + 1):
+                    if grid[i][j] == 1:
+                        x1 = min(x1,i)
+                        y1 = min(y1,j)
+                        x2 = max(x2,i)
+                        y2 = max(y2,j)
+            return 0 if x1 == float('inf') else (x2 - x1 + 1) * (y2 - y1 + 1)
+        for i in range(m - 1):
+            for j in range(n - 1):
+                ans = min(ans, area(0, i, 0, n - 1) + area(i + 1, m - 1, 0, j) + area(i + 1, m - 1, j + 1, n - 1))
+                ans = min(ans, area(i + 1, m - 1, 0, n - 1) + area(0, i, 0, j) + area(0, i, j + 1, n - 1))
+                ans = min(ans, area(0, m - 1, 0, j) + area(0, i, j + 1, n - 1) + area(i + 1, m - 1, j + 1, n - 1))
+                ans = min(ans, area(0, m - 1, j + 1, n - 1) + area(0, i, 0, j) + area(i + 1, m - 1, 0, j))
+
+        for i in range(m - 2):
+            for j in range(i + 1, m - 1):
+                ans = min(ans, area(0, i, 0, n - 1) + area(i + 1, j, 0, n - 1) + area(j + 1, m - 1, 0, n - 1))
+
+        for i in range(n - 2):
+            for j in range(i + 1, n - 1):
+                ans = min(ans, area(0, m - 1, 0, i) + area(0, m - 1, i + 1, j) + area(0, m - 1, j + 1, n - 1))
+        return ans
