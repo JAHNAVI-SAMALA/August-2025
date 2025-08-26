@@ -1,0 +1,12 @@
+class Solution:
+    def areaOfMaxDiagonal(self, dimensions: List[List[int]]) -> int:
+        max_diag = best_area = -1
+        for l,w in dimensions:
+            diag = l*l + w*w
+            area = l * w
+            if diag > max_diag:
+                max_diag = diag
+                best_area = area
+            elif diag == max_diag and area > best_area:
+                best_area = area
+        return best_area
