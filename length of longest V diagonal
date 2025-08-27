@@ -1,0 +1,26 @@
+class Solution:
+    def lenOfVDiagonal(self, grid: List[List[int]]) -> int:
+        import functools
+        DIRS = [(-1,1),(1,1),(1,-1),(-1,-1)]
+        m, n = len(grid), len(grid[0])
+
+        @functools.lru_cache(None)
+        def dfs(i, j, turned, num, dir_idx):
+            if not (0 <= i < m and 0 <= j < n) or grid[i][j] != num:
+                return 0
+            next_num = 0 if num == 2 else 2
+            dx, dy = DIRS[dir_idx]
+            best = 1 + dfs(i + dx, j + dy, turned, next_num, dir_idx)
+            if not turned:
+                next_dir = (dir_idx + 1) % 4
+                dx2, dy2 = DIRS[next_dir]
+                best = max(best, 1 + dfs(i + dx2, j + dy2, True, next_num, next_dir))
+            return best
+
+        ans = 0
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == 1:
+                    for dir_idx in range(4):
+                        ans = max(ans, dfs(i, j, False, 1, dir_idx))
+        return ans
